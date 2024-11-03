@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
 import path from 'path';
-import { WordStats } from '@/app/api/queryFromDB/route';
+import fs from 'fs';
 
 // กำหนด path ไปยังไฟล์ฐานข้อมูล SQLite
 const dbFilePath = path.join(process.cwd(), 'src', 'db', 'database.sqlite');
@@ -9,8 +9,17 @@ const dbFilePath = path.join(process.cwd(), 'src', 'db', 'database.sqlite');
 // ประเภทของฐานข้อมูล
 type DB = Database<sqlite3.Database, sqlite3.Statement>;
 
+// ฟังก์ชันตรวจสอบและสร้างโฟลเดอร์หากไม่มี
+const ensureDbDirectoryExists = () => {
+  const dir = path.dirname(dbFilePath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+};
+
 // initialize หรือสร้างฐานข้อมูล
 export const initializeDatabase = async (): Promise<DB> => {
+  ensureDbDirectoryExists()
   const db: DB = await open({
     filename: dbFilePath,
     driver: sqlite3.Database,
