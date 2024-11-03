@@ -1,5 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Ignore folders
+/src/words/*
+/src/zipWords/*
+/src/db/*
+
 # dependencies
 /node_modules
 /.pnp
